@@ -74,7 +74,16 @@ app.post('/api/persons', (request,response) => {
     if(!body.name || !body.number)
     {
         return response.status(400).json({
-            error: 'content missing'  
+            error: 'Namer or number is missing'  
+        })
+    }
+
+    //name must be unique
+    if(persons.find(per =>  per.name.toLowerCase() 
+    === body.name.toLowerCase()))
+    {
+        return response.status(400).json({
+            error: 'name must be unique'  
         })
     }
 
