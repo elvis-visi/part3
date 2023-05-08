@@ -56,7 +56,7 @@ app.get('/api/persons/:id', (request,response, next) => {
 
 })
 
-app.delete('/api/persons/:id', (request,response) => {
+app.delete('/api/persons/:id', (request,response,next) => {
     Person.findByIdAndRemove(request.params.id)
     .then(result => {
       response.status(204).end()
@@ -71,7 +71,7 @@ const generateId = () => {
     return maxId + 1;
   }
 
-app.post('/api/persons', (request,response) => {
+app.post('/api/persons', (request,response,next) => {
    
   const body = request.body
 
@@ -88,7 +88,7 @@ app.post('/api/persons', (request,response) => {
    person.save().then(savedPerson => {
     response.json(savedPerson)
    })
-
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -98,7 +98,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     name: body.name,
     number: body.number
    }
-   
+
    Person.findByIdAndUpdate(request.params.id, person, {new: true})
       .then(updatedPerson => {
         response.json(updatedPerson)
