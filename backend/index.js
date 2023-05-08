@@ -57,13 +57,13 @@ app.get('/api/persons/:id', (request,response, next) => {
 })
 
 app.delete('/api/persons/:id', (request,response) => {
-    const id = Number(request.params.id)
-
-    //filter the person with above id
-    persons = persons.filter(per => per.id !== id)
-
-    response.status(204).end()
+    Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
+
 const generateId = () => {
     const maxId = persons.length > 0 
     ? Math.max(...persons.map(per => per.id))
